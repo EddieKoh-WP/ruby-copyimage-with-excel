@@ -3,10 +3,26 @@
 require 'spreadsheet'    
 require 'fileutils'
 
+def prompt(*args)
+    print(*args)
+    gets.strip
+end
+
 Spreadsheet.client_encoding = 'UTF-8'
-book = Spreadsheet.open('/Users/Eddie/Downloads/store-final-image_20200129.xls')
-basePath = '/Users/Eddie/Downloads/stores'
-baseOriginalImagePath = '/Users/Eddie/ebates/kr/content'
+excelPath = prompt 'Input Excel File Path: '
+unless File.exist?(excelPath)
+	puts "Unable to locate file \nPlease check if location of the file is correct"
+	return
+end
+
+basePath = prompt 'Input Parent folder for image: (Optional) '
+basePath = basePath.empty? ? 'tmp' : basePath
+
+baseOriginalImagePath = prompt 'Base Parent path: (Optional) '
+baseOriginalImagePath = baseOriginalImagePath.empty? ? '' : baseOriginalImagePath
+
+# return
+book = Spreadsheet.open(excelPath)
 sheet1 = book.worksheet 0
 
 sheet1.each do |row|
@@ -34,3 +50,5 @@ sheet1.each do |row|
 		end
 	end
 end
+
+
